@@ -104,7 +104,7 @@ public class CourseDAOImpl implements CourseDAO {
         return courses;
     }
 
-    // Helper method to convert ResultSet → Course object
+    // Helper method to convert ResultSet → Course obj
     private Course mapResultSetToCourse(ResultSet rs) throws SQLException {
         Course course = new Course();
         course.setId(rs.getInt("id"));
