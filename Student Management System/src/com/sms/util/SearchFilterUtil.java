@@ -15,7 +15,6 @@ public class SearchFilterUtil {
 
     /**
      * Filters an ObservableList based on a search query.
-     *
      * @param originalList Original ObservableList
      * @param query        Search text (case-insensitive)
      * @param <T>          Type of objects in the list
