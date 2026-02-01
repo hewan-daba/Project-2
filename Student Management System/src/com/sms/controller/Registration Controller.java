@@ -39,7 +39,7 @@ public class RegistrationController {
         String phone = phoneField.getText().trim();
         Role role = roleComboBox.getValue();
 
-        if (username.isEmpty()  password.isEmpty()  fullName.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || fullName.isEmpty()) {
             AlertUtil.showError("Validation Error", "Username, Password, and Full Name are required.");
             return;
         }
@@ -49,7 +49,7 @@ public class RegistrationController {
             return;
         }
 
-        
+        // Now creating the user with FULL data (Fixes "Welcome, null")
         User user = new StudentUser(username, password, fullName, email, phone);
         user.setRole(role);
         

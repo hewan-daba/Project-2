@@ -22,56 +22,57 @@ public class LoginController {
 
     private final AuthService authService = new AuthServiceImpl();
 
-   
+    /**
+     * Handle login button click
+     */
     @FXML
     private void handleLogin() {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
         if (username.isEmpty() || password.isEmpty()) {
-            AlertUtil.showError("Validation Error", "Username and password cannot be empty.");
+            AlertUtil.showError("Error", "Username and password cannot be empty.");
             return;
         }
 
         try {
             User user = authService.login(username, password);
 
-            if (user == null) {
-                AlertUtil.showError("Login Failed", "Invalid username or password.");
-                return;
+            if (user != null) {
+                SessionManager.login(user);
+                Stage stage = (Stage) usernameField.getScene().getWindow();
+
+                // Standardized Dashboard Path
+                String dashboardPath = "/view/dashboard/dashboard.fxml";
+                String title = user.getRole().name() + " Dashboard";
+
+                SceneSwitcher.switchScene(stage, dashboardPath, title);
+                AlertUtil.showSuccess("Login successful. Welcome, " + user.getUsername() + "!");
+            } else {
+                AlertUtil.showError("Error", "Invalid username or password.");
             }
 
-            SessionManager.login(user);
-
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-            SceneSwitcher.switchScene(
-                    stage,
-                    "/view/dashboard/dashboard.fxml",
-                    user.getRole().name() + " Dashboard"
-            );
-
-            AlertUtil.showSuccess("Welcome, " + user.getUsername() + "!");
-
         } catch (AuthenticationException e) {
-            AlertUtil.showError("Authentication Error", e.getMessage());
+            AlertUtil.showError("Validation Error", e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            AlertUtil.showError("System Error", "Something went wrong. Please try again.");
+            AlertUtil.showError("Unexpected Error", "An error occurred: " + e.getMessage());
         }
     }
 
-    
+    /**
+     * Handle register button click (Matches onAction="#handleRegister" in FXML)
+     */
     @FXML
     private void handleRegister() {
         Stage stage = (Stage) usernameField.getScene().getWindow();
-        SceneSwitcher.switchScene(
-                stage,
-                "/view/register/register.fxml",
-                "User Registration"
-        );
+        // Path must match your actual folder: view/register/register.fxml
+        SceneSwitcher.switchScene(stage, "/view/register/register.fxml", "User Registration");
     }
 
-   
+    /**
+     * Handle reset/clear
+     */
     @FXML
     private void handleReset() {
         usernameField.clear();

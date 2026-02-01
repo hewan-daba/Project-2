@@ -12,13 +12,16 @@ import com.sms.service.impl.EnrollmentServiceImpl;
 import com.sms.service.impl.StudentServiceImpl;
 import com.sms.util.AlertUtil;
 import com.sms.util.SceneSwitcher;
+import com.sms.dao.impl.EnrollmentDAOImpl;
+import com.sms.dao.impl.StudentDAOImpl;
+import com.sms.dao.impl.CourseDAOImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 public class EnrollmentController {
 
@@ -34,74 +37,83 @@ public class EnrollmentController {
 
     private final StudentService studentService = new StudentServiceImpl();
     private final CourseService courseService = new CourseServiceImpl();
-    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl();
+    
+    // Initializing Service with DAOs
+    private final EnrollmentService enrollmentService = new EnrollmentServiceImpl(
+            new EnrollmentDAOImpl(), new StudentDAOImpl(), new CourseDAOImpl());
 
     private final ObservableList<Enrollment> enrollmentList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
+        // Load dropdown data
         studentComboBox.setItems(FXCollections.observableArrayList(studentService.getAllStudents()));
         courseComboBox.setItems(FXCollections.observableArrayList(courseService.getAllCourses()));
         statusComboBox.setItems(FXCollections.observableArrayList(EnrollmentStatus.values()));
 
-        idColumn.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
+        // Table column mapping
+        idColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
+        
+        studentColumn.setCellValueFactory(data -> 
+            new SimpleStringProperty(data.getValue().getStudent() != null ? 
+                    data.getValue().getStudent().getFullName() : "N/A"));
 
-        studentColumn.setCellValueFactory(d ->
-            new SimpleStringProperty(
-                d.getValue().getStudent() != null
-                    ? d.getValue().getStudent().getFullName()
-                    : "N/A"
-            )
-        );
+        courseColumn.setCellValueFactory(data -> 
+            new SimpleStringProperty(data.getValue().getCourse() != null ? 
+                    data.getValue().getCourse().getCourseName() : "N/A"));
 
-        courseColumn.setCellValueFactory(d ->
-            new SimpleStringProperty(
-                d.getValue().getCourse() != null
-                    ? d.getValue().getCourse().getCourseName()
-                    : "N/A"
-            )
-        );
-
-        statusColumn.setCellValueFactory(d ->
-            new SimpleStringProperty(d.getValue().getStatus().name())
-        );
+        statusColumn.setCellValueFactory(data -> 
+            new SimpleStringProperty(data.getValue().getStatus().name()));
 
         loadEnrollments();
     }
 
     @FXML
     private void handleAdd() {
-        Student student = studentComboBox.getValue();
-        Course course = courseComboBox.getValue();
-        EnrollmentStatus status = statusComboBox.getValue();
+        try {
+            Student student = studentComboBox.getValue();
+            Course course = courseComboBox.getValue();
+            EnrollmentStatus status = statusComboBox.getValue();
 
-        if (student == null || course == null || status == null) {
-            AlertUtil.showError("Error", "All fields must be selected.");
-            return;
+            if (student == null || course == null || status == null) {
+                AlertUtil.showError("Error", "All fields must be selected.");
+                return;
+            }
+
+            Enrollment enrollment = new Enrollment();
+            enrollment.setStudentId(student.getId());
+            enrollment.setCourseId(course.getId());
+            enrollment.setStatus(status);
+
+            enrollmentService.addEnrollment(enrollment);
+            AlertUtil.showSuccess("Student enrolled successfully.");
+            handleClear();
+            loadEnrollments();
+        } catch (Exception e) {
+            AlertUtil.showError("Error", e.getMessage());
         }
+    }
 
-        Enrollment e = new Enrollment();
-        e.setStudentId(student.getId());
-        e.setCourseId(course.getId());
-        e.setStatus(status);
-
-        enrollmentService.addEnrollment(e);
-        AlertUtil.showSuccess("Enrollment added.");
-        handleClear();
-        loadEnrollments();
+    @FXML
+    private void handleUpdate() {
+        AlertUtil.showSuccess("Update feature coming soon.");
     }
 
     @FXML
     private void handleDelete() {
-        Enrollment e = enrollmentTable.getSelectionModel().getSelectedItem();
-        if (e == null) {
-            AlertUtil.showError("Error", "Select an enrollment.");
+        Enrollment selected = enrollmentTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            AlertUtil.showError("Select Error", "Select an enrollment to delete.");
             return;
         }
 
-        enrollmentService.deleteEnrollment(e.getId());
-        AlertUtil.showSuccess("Enrollment deleted.");
-        loadEnrollments();
+        try {
+            enrollmentService.deleteEnrollment(selected.getId());
+            AlertUtil.showSuccess("Enrollment removed successfully.");
+            loadEnrollments();
+        } catch (Exception e) {
+            AlertUtil.showError("Error", e.getMessage());
+        }
     }
 
     @FXML

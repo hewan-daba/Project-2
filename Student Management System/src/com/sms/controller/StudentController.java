@@ -34,7 +34,7 @@ public class StudentController {
 
     @FXML
     public void initialize() {
-       
+        // Table columns mapping
         idColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
         studentIdColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStudentId()));
         fullNameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFullName()));
@@ -43,7 +43,7 @@ public class StudentController {
 
         loadStudents();
 
-        
+        // Populate fields when selecting a row
         studentTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSel, selected) -> {
             if (selected != null) {
                 studentIdField.setText(selected.getStudentId());
@@ -93,7 +93,7 @@ public class StudentController {
         }
     }
 
-@FXML
+    @FXML
     private void handleDelete() {
         Student selected = studentTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
