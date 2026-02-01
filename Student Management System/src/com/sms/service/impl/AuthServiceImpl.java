@@ -81,4 +81,3 @@ public class AuthServiceImpl implements AuthService {
         SessionManager.logout();
     }
 }
-

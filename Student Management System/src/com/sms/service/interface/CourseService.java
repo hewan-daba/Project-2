@@ -4,6 +4,7 @@ import com.sms.model.academic.Course;
 import java.util.List;
 
 /**
+ * CourseService
  *
  * Interface for managing courses.
  * Defines operations that can be performed on courses.

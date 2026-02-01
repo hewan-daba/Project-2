@@ -46,6 +46,7 @@ public interface GradeDAO {
      * @return List of Grade objects
      */
     List<Grade> getAllGrades() throws DataAccessException;
+    List<Grade> getGradesByStudentUsername(String username);
 
     /**
      * Get all grades for a specific enrollment.

@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.sms.controller.DashboardController">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sms.controller.DashboardController"
+      spacing="20"
+      alignment="TOP_CENTER"
+      stylesheets="/style/main/main.css">
 
-    <top>
-        <Label text="Student Dashboard"
-               style="-fx-font-size: 18px; -fx-padding: 10;" />
-    </top>
+    <padding>
+        <Insets top="40" right="20" bottom="20" left="20"/>
+    </padding>
 
-    <center>
-        <VBox spacing="10" alignment="CENTER">
-            <Label fx:id="gpaLabel" text="GPA: -" />
-            <Button text="Calculate GPA" onAction="#handleCalculateGPA"/>
-            <Button text="Export Grades (CSV)" onAction="#handleExport"/>
-        </VBox>
-    </center>
+    <!-- Title -->
+    <Label text="Student Management Dashboard"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-</BorderPane>
+    <!-- Welcome Message -->
+    <VBox alignment="CENTER" spacing="5">
+        <Label fx:id="welcomeLabel" text="Welcome, User!"
+               style="-fx-font-size: 16px; -fx-font-style: italic;"/>
+        <Label fx:id="roleLabel" text="Role: Unknown" 
+               style="-fx-font-size: 14px; -fx-text-fill: gray;"/>
+    </VBox>
+
+    <!-- Buttons organized in 2 columns and 3 rows -->
+    <!-- ADDED fx:id TO ALL BUTTONS BELOW -->
+    <GridPane hgap="20" vgap="20" alignment="CENTER">
+        <!-- Row 0 -->
+        <Button fx:id="studentsButton" text="Students" prefWidth="150" onAction="#handleStudents" 
+                GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        
+        <Button fx:id="coursesButton" text="Courses" prefWidth="150" onAction="#handleCourses" 
+                GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        
+        <!-- Row 1 -->
+        <Button fx:id="enrollmentsButton" text="Enrollments" prefWidth="150" onAction="#handleEnrollments" 
+                GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        
+        <Button fx:id="gradesButton" text="Grades" prefWidth="150" onAction="#handleGrades" 
+                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        
+        <!-- Row 2 -->
+        <Button fx:id="exportButton" text="Export CSV" prefWidth="150" onAction="#handleExport" 
+                GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        
+        <Button fx:id="logoutButton" text="Logout" prefWidth="150" onAction="#handleLogout" 
+                GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    </GridPane>
+
+</VBox>

@@ -5,6 +5,8 @@ import com.sms.database.DatabaseConnection;
 import com.sms.exception.DataAccessException;
 import com.sms.model.academic.Enrollment;
 import com.sms.model.enums.EnrollmentStatus;
+import com.sms.model.academic.Student;
+import com.sms.model.academic.Course;
 
 import java.sql.*;
 import java.util.ArrayList;

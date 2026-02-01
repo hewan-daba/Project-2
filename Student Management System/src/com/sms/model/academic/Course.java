@@ -1,6 +1,8 @@
 package com.sms.model.academic;
 
 /**
+ * Course
+ *
  * Represents an academic course in the system.
  * Stores course code, name, and credit information.
  */
@@ -73,4 +75,3 @@ public class Course {
                 '}';
     }
 }
-

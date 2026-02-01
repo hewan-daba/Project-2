@@ -10,13 +10,16 @@
       alignment="CENTER"
       stylesheets="/style/main/main.css">
 
+    <!-- Proper Insets to prevent "Coerce" error -->
     <padding>
         <Insets top="40" right="40" bottom="40" left="40"/>
     </padding>
 
+    <!-- Title -->
     <Label text="Student Management System"
            style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
+    <!-- Form - Organized correctly in Rows and Columns -->
     <GridPane hgap="10" vgap="15" alignment="CENTER">
         <!-- Row 0 -->
         <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
@@ -29,11 +32,13 @@
                        prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
     </GridPane>
 
+    <!-- Buttons -->
     <HBox spacing="15" alignment="CENTER">
-        <Button text="Login" fx:id="loginButton" onAction="#handleLogin" prefWidth="80"/>
-        <Button text="Register" fx:id="registerButton" onAction="#handleRegister" prefWidth="80"/>
+        <Button text="Login" onAction="#handleLogin" prefWidth="80"/>
+        <Button text="Register" onAction="#handleRegister" prefWidth="80"/>
     </HBox>
 
+    <!-- Feedback Label -->
     <Label fx:id="messageLabel" textFill="red"/>
 
 </VBox>

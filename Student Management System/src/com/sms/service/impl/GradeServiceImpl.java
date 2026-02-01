@@ -43,6 +43,10 @@ public class GradeServiceImpl implements GradeService {
      * @throws ValidationException if grade score is invalid
      */
     @Override
+    public List<Grade> getGradesByStudentUsername(String username) {
+        return gradeDAO.getGradesByStudentUsername(username);
+    }
+    @Override
     public void addGrade(Grade grade) throws DataAccessException {
         if (grade.getScore() < 0 || grade.getScore() > 100) {
             throw new ValidationException("Grade score must be between 0 and 100.");
@@ -82,6 +86,7 @@ public class GradeServiceImpl implements GradeService {
     }
 
     /**
+     * Get a grade by its ID.
      *
      * @param gradeId Grade ID
      * @return Grade object
@@ -124,27 +129,5 @@ public class GradeServiceImpl implements GradeService {
     public List<Grade> getAllGrades() throws DataAccessException {
         return gradeDAO.getAllGrades();
     }
-    @Override
-    public double calculateGPA(String studentId) {
-        List<Grade> grades = gradeDAO.getGradesByStudentId(studentId);
-        if (grades.isEmpty()) return 0.0;
-
-        double totalPoints = 0;
-        int totalCredits = 0;
-
-        for (Grade g : grades) {
-            int credit = g.getEnrollment().getCourse().getCredit();
-            totalPoints += g.getScore() * credit;
-            totalCredits += credit;
-        }
-
-        return totalCredits == 0 ? 0.0 : totalPoints / totalCredits;
-    }
-
-    public List<Grade> getGradesByStudent(String studentId) {
-        return gradeDAO.getGradesByStudentId(studentId); // DAO method
-    }
-
 
 }
-
